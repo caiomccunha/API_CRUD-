@@ -28,8 +28,8 @@ public class AlunoController {
         return service.listarTodos();
     }
 
-    @GetMapping("{/id}")
-    public ResponseEntity <AlunoModel> buscarPorId(@PathVariable Long idAluno){
+    @GetMapping("/{id}")
+    public ResponseEntity <AlunoModel> buscarPorId(@PathVariable ("id") Long idAluno){
        return service.buscarPorId(idAluno).map(ResponseEntity :: ok).orElse(ResponseEntity.notFound().build());
     }
 
@@ -38,7 +38,7 @@ public class AlunoController {
         return service.salvar(alunosModel);
     }
 
-    @PutMapping("{/id}")
+    @PutMapping("/{id}")
     public ResponseEntity <AlunoModel> atualizar (@PathVariable Long idAluno, @RequestBody AlunoModel alunoModel){
         if(!service.buscarPorId(idAluno).isPresent()){
             return ResponseEntity.notFound().build();
@@ -47,7 +47,7 @@ public class AlunoController {
         return ResponseEntity.ok(service.salvar(alunoModel));
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity <Void> deletarAluno (@PathVariable Long idAluno){
         if(!service.buscarPorId(idAluno).isPresent()){
             return ResponseEntity.notFound().build();
