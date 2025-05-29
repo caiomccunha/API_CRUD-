@@ -18,12 +18,13 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class AlunoModel {
+
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Long id_Aluno;
+    @GeneratedValue (strategy = GenerationType.AUTO)
+    private Long idAluno;
 
     @Column(nullable = false, length = 255)
-    private String name;
+    private String nome;
 
     @Column(length = 300)
     private String email;

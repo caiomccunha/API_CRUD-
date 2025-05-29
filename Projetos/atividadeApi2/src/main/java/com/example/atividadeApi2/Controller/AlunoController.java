@@ -17,6 +17,7 @@ import com.example.atividadeApi2.Model.AlunoModel;
 import com.example.atividadeApi2.Service.AlunoService;
 
 @RestController
+
 @RequestMapping("api/alunos")
 public class AlunoController {
 
@@ -43,16 +44,16 @@ public class AlunoController {
         if(!service.buscarPorId(idAluno).isPresent()){
             return ResponseEntity.notFound().build();
         }
-        alunoModel.setId_Aluno(idAluno);
+        alunoModel.setIdAluno(idAluno);
         return ResponseEntity.ok(service.salvar(alunoModel));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idAluno}")
     public ResponseEntity <Void> deletarAluno (@PathVariable Long idAluno){
-        if(!service.buscarPorId(idAluno).isPresent()){
-            return ResponseEntity.notFound().build();
+        if(service.buscarPorId(idAluno).isPresent()){
+            return ResponseEntity.noContent().build();
         }
         service.deletarAluno(idAluno);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
     }
 }
