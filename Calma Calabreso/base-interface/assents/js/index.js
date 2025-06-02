@@ -27,7 +27,7 @@
               <td class="px-4 py-2">${element.nome}</td>
               <td class="px-4 py-2">${element.email}</td>
               <td class="px-4 py-2"><button  class="bg-red-500 text-white px-2 py-1 rounded" onclick="remover(this)">remover</button>
-              <button class ="bg-green-500 text-black px-2 py-1 rounded" onclick="editar(this)">editar</button></td>
+              <button class ="bg-green-500 text-black px-2 py-1 rounded" onclick="editar(this, event)">editar</button></td>
           </tr>
         `;
         
@@ -108,5 +108,75 @@
           Swal.fire('Cancelado', '', 'info');
         }
       });
-
     }
+ 
+ 
+    function editar(dadosbotao, event) {
+  event.preventDefault();
+
+  const linha = dadosbotao.parentElement.parentElement;
+  const id = linha.children[0].textContent.trim();
+  const nomeAtual = linha.children[1].textContent.trim();
+  const emailAtual = linha.children[2].textContent.trim();
+
+  Swal.fire({
+    title: 'Editar Aluno',
+    html:
+      `<input id="swal-nome" class="swal2-input" placeholder="Nome" value="${nomeAtual}">
+       <input id="swal-email" class="swal2-input" placeholder="Email" value="${emailAtual}">`,
+    showCancelButton: true,
+    confirmButtonText: 'Salvar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const nomeNovo = document.getElementById('swal-nome').value.trim();
+      const emailNovo = document.getElementById('swal-email').value.trim();
+
+      if (nomeNovo && emailNovo) {
+        const dados = { nome: nomeNovo, email: emailNovo };
+
+        fetch(`http://localhost:8080/api/alunos/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(dados)
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Erro na requisição: " + response.status);
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Atualiza a linha na tabela
+          linha.children[1].textContent = nomeNovo;
+          linha.children[2].textContent = emailNovo;
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Atualizado!',
+            text: 'Os dados foram atualizados com sucesso.'
+          });
+        })
+        .catch(error => {
+          console.error(error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: 'Falha ao atualizar.'
+          });
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Todos os campos devem ser preenchidos.'
+        });
+      }
+    }
+  });
+}
+
+
+
