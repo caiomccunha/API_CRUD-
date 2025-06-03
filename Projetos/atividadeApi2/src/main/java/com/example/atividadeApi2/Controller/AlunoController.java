@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import com.example.atividadeApi2.Model.AlunoModel;
 import com.example.atividadeApi2.Service.AlunoService;
 
 @RestController
+@CrossOrigin(origins = "*")
 
 @RequestMapping("api/alunos")
 public class AlunoController {
@@ -29,7 +31,7 @@ public class AlunoController {
         return service.listarTodos();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idAluno}")
     public ResponseEntity <AlunoModel> buscarPorId(@PathVariable ("id") Long idAluno){
        return service.buscarPorId(idAluno).map(ResponseEntity :: ok).orElse(ResponseEntity.notFound().build());
     }
@@ -39,7 +41,7 @@ public class AlunoController {
         return service.salvar(alunosModel);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idAluno}")
     public ResponseEntity <AlunoModel> atualizar (@PathVariable Long idAluno, @RequestBody AlunoModel alunoModel){
         if(!service.buscarPorId(idAluno).isPresent()){
             return ResponseEntity.notFound().build();

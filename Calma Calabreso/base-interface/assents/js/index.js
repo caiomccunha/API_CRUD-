@@ -23,11 +23,11 @@
         //Adicionando HTML
         linha.innerHTML = `
           <tr>
-          <td class="px-4 py-2">${element.id}</td>
+          <td class="px-4 py-2">${element.idAluno}</td>
               <td class="px-4 py-2">${element.nome}</td>
               <td class="px-4 py-2">${element.email}</td>
               <td class="px-4 py-2"><button  class="bg-red-500 text-white px-2 py-1 rounded" onclick="remover(this)">remover</button>
-              <button class ="bg-green-500 text-black px-2 py-1 rounded" onclick="editar(this, event)">editar</button></td>
+              <button class ="bg-green-500 text-black px-2 py-1 rounded" onclick="editar(this, event,${element.idAluno} )">editar</button></td>
           </tr>
         `;
         
@@ -111,7 +111,7 @@
     }
  
  
-    function editar(dadosbotao, event) {
+    function editar(dadosbotao, event, idAluno) {
   event.preventDefault();
 
   const linha = dadosbotao.parentElement.parentElement;
@@ -129,13 +129,14 @@
     cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
+      
       const nomeNovo = document.getElementById('swal-nome').value.trim();
       const emailNovo = document.getElementById('swal-email').value.trim();
 
       if (nomeNovo && emailNovo) {
         const dados = { nome: nomeNovo, email: emailNovo };
 
-        fetch(`http://localhost:8080/api/alunos/${id}`, {
+        fetch(`http://localhost:8080/api/alunos/${idAluno}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
