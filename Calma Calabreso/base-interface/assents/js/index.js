@@ -23,11 +23,11 @@
         //Adicionando HTML
         linha.innerHTML = `
           <tr>
-          <td class="px-4 py-2">${element.idAluno}</td>
+          <td class="px-4 py-2">${element.id}</td>
               <td class="px-4 py-2">${element.nome}</td>
               <td class="px-4 py-2">${element.email}</td>
-              <td class="px-4 py-2"><button  class="bg-red-500 text-white px-2 py-1 rounded" onclick="remover(this)">remover</button>
-              <button class ="bg-green-500 text-black px-2 py-1 rounded" onclick="editar(this, event,${element.idAluno} )">editar</button></td>
+              <td class="px-4 py-2"><button  class="bg-red-500 text-white px-2 py-1 rounded" onclick="remover(this,${element.id} )">remover</button>
+              <button class ="bg-green-500 text-black px-2 py-1 rounded" onclick="editar(this, event,${element.id} )">editar</button></td>
           </tr>
         `;
         
@@ -80,7 +80,7 @@
     }
 
     //Remover Alguma Linha da tabela
-    function remover(dadosbotao){
+    function remover(dadosbotao,id){
       event.preventDefault();
   
       Swal.fire({
@@ -93,13 +93,20 @@
       if (result.isConfirmed){
       const nome = dadosbotao.parentElement.parentElement;
       nome.remove();
-      fetch('http://localhost:8080/api/alunos', {
+      fetch(`http://localhost:8080/api/alunos/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
       },
     })
-    .then(response => response.json())
+    .then(response => {
+      response.text()
+      console.log(response);
+    })
+    .then(data => {
+    console.log(id);
+    console.log('Resource deleted successfully:', id);
+    })
     .catch(error => {
       console.log(error);
     });
@@ -111,11 +118,11 @@
     }
  
  
-    function editar(dadosbotao, event, idAluno) {
+    function editar(dadosbotao, event, id) {
   event.preventDefault();
 
   const linha = dadosbotao.parentElement.parentElement;
-  const id = linha.children[0].textContent.trim();
+ // const id = linha.children[0].textContent.trim();
   const nomeAtual = linha.children[1].textContent.trim();
   const emailAtual = linha.children[2].textContent.trim();
 
@@ -136,7 +143,7 @@
       if (nomeNovo && emailNovo) {
         const dados = { nome: nomeNovo, email: emailNovo };
 
-        fetch(`http://localhost:8080/api/alunos/${idAluno}`, {
+        fetch(`http://localhost:8080/api/alunos/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'

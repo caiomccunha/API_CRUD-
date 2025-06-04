@@ -18,15 +18,15 @@ public class AlunoService{
     public List <AlunoModel> listarTodos(){
         return repository.findAll();
     }
-    public Optional <AlunoModel> buscarPorId(Long idAluno){
-        return repository.findById(idAluno);
+    public Optional <AlunoModel> buscarPorId(Long id){
+        return repository.findById(id);
     }
 
     public AlunoModel salvar (AlunoModel alunoModels){
         return repository.save(alunoModels);
     }
 
-    public void deletarAluno(Long idAluno){
-        repository.deleteById(idAluno);
+    public void deletarAluno(Long id){
+        repository.deleteById(id);
     }
 }

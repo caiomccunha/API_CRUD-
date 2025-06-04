@@ -20,8 +20,8 @@ import lombok.Setter;
 public class AlunoModel {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
-    private Long idAluno;
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, length = 255)
     private String nome;
